@@ -19,4 +19,10 @@ export const environment = {
     port: parseInt(process.env.MAIN_SERVICE_CACHE_PORT, 10),
     db: parseInt(process.env.MAIN_SERVICE_CACHE_DB, 10),
   },
+  queue: {
+    host: process.env.MAIN_SERVICE_QUEUE_HOST,
+    port: parseInt(process.env.MAIN_SERVICE_QUEUE_PORT, 10),
+    db: parseInt(process.env.MAIN_SERVICE_QUEUE_DB, 10),
+    prefix: process.env.MAIN_SERVICE_QUEUE_PREFIX,
+  },
 };
