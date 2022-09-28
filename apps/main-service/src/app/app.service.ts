@@ -12,7 +12,7 @@ export class AppService {
       const responses = ['Welcome here', 'Akwaba', 'Woezor'];
       message = responses[Math.floor(Math.random() * responses.length)];
 
-      await this.cache.set('message', message, { ttl: 30000 });
+      await this.cache.set('message', message, { ttl: 30 });
     }
     return { message };
   }
