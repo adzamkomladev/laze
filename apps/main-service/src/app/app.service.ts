@@ -34,7 +34,7 @@ export class AppService {
     return { message };
   }
 
-  @Interval('sendSms', 2000)
+  // @Interval('sendSms', 2000)
   async sendSms() {
     let message = (await this.cache.get('message')) ?? 'Good morning';
 

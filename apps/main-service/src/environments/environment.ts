@@ -10,7 +10,7 @@ export const environment = {
     port: parseInt(process.env.MAIN_SERVICE_DATABASE_PORT, 10),
     username: process.env.MAIN_SERVICE_DATABASE_USERNAME,
     password: process.env.MAIN_SERVICE_DATABASE_PASSWORD,
-    name: process.env.MAIN_SERVICE_DATABASE_NAME,
+    database: process.env.MAIN_SERVICE_DATABASE_NAME,
     synchronize: process.env.MAIN_SERVICE_DATABASE_SYNCHRONIZE === 'true',
     autoLoadEntities: true,
   },

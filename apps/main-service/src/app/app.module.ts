@@ -14,12 +14,16 @@ import { AppService } from './app.service';
 import { EmailConsumer } from './email.consumer';
 import { SmsConsumer } from './sms.consumer';
 import { EmailReroutedListener } from './email-rerouted.listener';
+import { Notification } from './notification.entity';
 
 @Module({
   imports: [
-    TypeOrmModule.forRoot({
-      ...environment.database,
-    } as TypeOrmModuleOptions),
+    TypeOrmModule.forRootAsync({
+      useFactory: () =>
+        ({
+          ...environment.database,
+        } as TypeOrmModuleOptions),
+    }),
     CacheModule.register<ClientOpts>({
       store: redisStore,
       host: environment.cache.host,
@@ -44,6 +48,7 @@ import { EmailReroutedListener } from './email-rerouted.listener';
     ),
     ScheduleModule.forRoot(),
     EventEmitterModule.forRoot(),
+    TypeOrmModule.forFeature([Notification]),
   ],
   controllers: [AppController],
   providers: [AppService, EmailConsumer, SmsConsumer, EmailReroutedListener],

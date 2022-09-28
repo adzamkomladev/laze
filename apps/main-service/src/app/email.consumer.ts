@@ -1,13 +1,20 @@
 import { Process, Processor } from '@nestjs/bull';
 import { Logger } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
 
 import { Job } from 'bull';
+import { Repository } from 'typeorm';
+
+import { Notification } from './notification.entity';
 
 @Processor('email')
 export class EmailConsumer {
   private readonly logger: Logger;
 
-  constructor() {
+  constructor(
+    @InjectRepository(Notification)
+    private readonly notificationRepository: Repository<Notification>
+  ) {
     this.logger = new Logger(EmailConsumer.name);
   }
 
@@ -18,6 +25,11 @@ export class EmailConsumer {
       progress += 5;
       await job.progress(progress);
     }
+
+    const notification = this.notificationRepository.create({
+      message: job.data.message,
+    });
+    await this.notificationRepository.save(notification);
     this.logger.log(job.data.message);
 
     return { message: job.data.message };

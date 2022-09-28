@@ -19,7 +19,7 @@ export class EmailReroutedListener {
     this.logger = new Logger(EmailReroutedListener.name);
   }
 
-  @OnEvent('reroute.email')
+  @OnEvent('reroute.email', { async: true })
   async handleRerouteEmailEvent(event: RerouteEmailEvent) {
     await this.emailQueue.add({ ...event });
 
