@@ -34,11 +34,11 @@ export class AppService {
     return { message };
   }
 
-  @Interval('sendSms', 1000)
+  @Interval('sendSms', 2000)
   async sendSms() {
     let message = (await this.cache.get('message')) ?? 'Good morning';
 
-    const responses = [1, 20, 45, 100, 2, 67];
+    const responses = [1, 20, 45, 83, 96, 10, 2, 67];
     const repeat = responses[Math.floor(Math.random() * responses.length)];
 
     for (let i = 0; i < repeat; i++) {
