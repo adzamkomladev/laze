@@ -3,23 +3,24 @@ import { Logger } from '@nestjs/common';
 
 import { Job } from 'bull';
 
-@Processor('email')
-export class EmailConsumer {
+@Processor('sms')
+export class SmsConsumer {
   private readonly logger: Logger;
 
   constructor() {
-    this.logger = new Logger(EmailConsumer.name);
+    this.logger = new Logger(SmsConsumer.name);
   }
 
   @Process()
-  async sendEmail(job: Job<{ message: string }>) {
+  async sendSms(job: Job<{ message: string; repeat: number }>) {
     let progress = 0;
     for (let i = 0; i < 100; i += 5) {
       progress += 5;
       await job.progress(progress);
     }
-    this.logger.log(job.data.message);
 
-    return { message: job.data.message };
+    this.logger.log('sendSms processed', job.data);
+
+    return { ...job.data };
   }
 }

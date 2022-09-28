@@ -1,6 +1,7 @@
 import { CacheModule, Module } from '@nestjs/common';
 import { TypeOrmModule, TypeOrmModuleOptions } from '@nestjs/typeorm';
 import { BullModule } from '@nestjs/bull';
+import { ScheduleModule } from '@nestjs/schedule';
 
 import type { ClientOpts } from 'redis';
 import * as redisStore from 'cache-manager-redis-store';
@@ -10,6 +11,7 @@ import { environment } from '../environments/environment';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { EmailConsumer } from './email.consumer';
+import { SmsConsumer } from './sms.consumer';
 
 @Module({
   imports: [
@@ -38,8 +40,9 @@ import { EmailConsumer } from './email.consumer';
         name: 'sms',
       }
     ),
+    ScheduleModule.forRoot(),
   ],
   controllers: [AppController],
-  providers: [AppService, EmailConsumer],
+  providers: [AppService, EmailConsumer, SmsConsumer],
 })
 export class AppModule {}
