@@ -7,12 +7,16 @@ export const environment = {
   },
   database: {
     type: process.env.MAIN_SERVICE_DATABASE_TYPE,
-    host: process.env.MAIN_SERVICE_DATABASE_HOST,
-    port: process.env.MAIN_SERVICE_DATABASE_PORT,
+    port: parseInt(process.env.MAIN_SERVICE_DATABASE_PORT, 10),
     username: process.env.MAIN_SERVICE_DATABASE_USERNAME,
     password: process.env.MAIN_SERVICE_DATABASE_PASSWORD,
     name: process.env.MAIN_SERVICE_DATABASE_NAME,
     synchronize: process.env.MAIN_SERVICE_DATABASE_SYNCHRONIZE === 'true',
-    autoLoadEntities: false,
+    autoLoadEntities: true,
+  },
+  cache: {
+    host: process.env.MAIN_SERVICE_CACHE_HOST,
+    port: parseInt(process.env.MAIN_SERVICE_CACHE_PORT, 10),
+    db: parseInt(process.env.MAIN_SERVICE_CACHE_DB, 10),
   },
 };
