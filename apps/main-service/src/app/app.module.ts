@@ -3,9 +3,12 @@ import { TypeOrmModule, TypeOrmModuleOptions } from '@nestjs/typeorm';
 import { BullModule } from '@nestjs/bull';
 import { ScheduleModule } from '@nestjs/schedule';
 import { EventEmitterModule } from '@nestjs/event-emitter';
+import { GraphQLModule } from '@nestjs/graphql';
+import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 
 import type { ClientOpts } from 'redis';
 import * as redisStore from 'cache-manager-redis-store';
+import { ApolloServerPluginLandingPageLocalDefault } from 'apollo-server-core';
 
 import { environment } from '../environments/environment';
 
@@ -15,6 +18,7 @@ import { EmailConsumer } from './email.consumer';
 import { SmsConsumer } from './sms.consumer';
 import { EmailReroutedListener } from './email-rerouted.listener';
 import { Notification } from './notification.entity';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
@@ -49,6 +53,13 @@ import { Notification } from './notification.entity';
     ScheduleModule.forRoot(),
     EventEmitterModule.forRoot(),
     TypeOrmModule.forFeature([Notification]),
+    GraphQLModule.forRoot<ApolloDriverConfig>({
+      driver: ApolloDriver,
+      autoSchemaFile: true,
+      playground: false,
+      plugins: [ApolloServerPluginLandingPageLocalDefault()],
+    }),
+    AuthModule,
   ],
   controllers: [AppController],
   providers: [AppService, EmailConsumer, SmsConsumer, EmailReroutedListener],
