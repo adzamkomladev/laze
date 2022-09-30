@@ -19,6 +19,7 @@ import { SmsConsumer } from './sms.consumer';
 import { EmailReroutedListener } from './email-rerouted.listener';
 import { Notification } from './notification.entity';
 import { AuthModule } from './auth/auth.module';
+import { UsersModule } from './users/users.module';
 
 @Module({
   imports: [
@@ -60,6 +61,7 @@ import { AuthModule } from './auth/auth.module';
       plugins: [ApolloServerPluginLandingPageLocalDefault()],
     }),
     AuthModule,
+    UsersModule,
   ],
   controllers: [AppController],
   providers: [AppService, EmailConsumer, SmsConsumer, EmailReroutedListener],

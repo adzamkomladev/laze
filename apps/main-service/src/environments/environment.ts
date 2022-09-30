@@ -25,4 +25,11 @@ export const environment = {
     db: parseInt(process.env.MAIN_SERVICE_QUEUE_DB, 10),
     prefix: process.env.MAIN_SERVICE_QUEUE_PREFIX,
   },
+  jwt: {
+    secret: process.env.MAIN_SERVICE_JWT_SECRET,
+    ignoreExpiration: process.env.MAIN_SERVICE_JWT_IGNORE_EXPIRATION === 'true',
+    signOptions: {
+      expiresIn: process.env.MAIN_SERVICE_JWT_SIGN_OPTIONS_EXPIRES_IN,
+    },
+  },
 };

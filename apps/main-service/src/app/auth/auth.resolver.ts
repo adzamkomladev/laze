@@ -1,12 +1,24 @@
 import { Resolver, Query, Mutation, Args, Int } from '@nestjs/graphql';
+
 import { AuthService } from './auth.service';
+
 import { Auth } from './entities/auth.entity';
+
 import { CreateAuthInput } from './dto/create-auth.input';
 import { UpdateAuthInput } from './dto/update-auth.input';
+import { SignUpViaEmailInput } from './dto/sign-up-via-email.input';
+import { SignedUpViaEmailOutput } from './dto/signed-up-via-email.output';
 
-@Resolver(() => Auth)
+@Resolver()
 export class AuthResolver {
   constructor(private readonly authService: AuthService) {}
+
+  @Mutation(() => SignedUpViaEmailOutput, { name: 'signUpViaEmail' })
+  signUpViaEmail(
+    @Args('signUpViaEmailInput') signUpViaEmailInput: SignUpViaEmailInput
+  ) {
+    return this.authService.signUpViaEmail(signUpViaEmailInput);
+  }
 
   @Mutation(() => Auth)
   createAuth(@Args('createAuthInput') createAuthInput: CreateAuthInput) {
