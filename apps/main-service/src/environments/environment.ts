@@ -32,4 +32,10 @@ export const environment = {
       expiresIn: process.env.MAIN_SERVICE_JWT_SIGN_OPTIONS_EXPIRES_IN,
     },
   },
+  mail: {
+    host: process.env.MAIN_SERVICE_MAIL_HOST,
+    port: parseInt(process.env.MAIN_SERVICE_MAIL_PORT, 10),
+    fromAddress: process.env.MAIN_SERVICE_MAIL_FROM_ADDRESS,
+    fromSection: `'No Reply' <${process.env.MAIN_SERVICE_MAIL_FROM_ADDRESS}>`,
+  },
 };

@@ -16,20 +16,23 @@ import * as bcrypt from 'bcrypt';
 
 import { Profile } from './profile.entity';
 
-@Entity()
 @ObjectType()
+@Entity()
 export class User {
   @Field(() => ID, { description: 'This is the ID of the user' })
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @OneToOne((type) => Profile, (profile) => profile.user)
+  @Field({ description: 'User Profile' })
+  @OneToOne(() => Profile, (profile) => profile.user)
   @JoinColumn()
   profile: Profile;
 
+  @Field({ description: 'Email address of user' })
   @Column({ length: 100, unique: true })
   email: string;
 
+  @Field({ description: 'Phone number of user', nullable: true })
   @Column({ length: 20, nullable: true, unique: true })
   phone?: string;
 
@@ -37,9 +40,11 @@ export class User {
   @Exclude()
   password: string;
 
+  @Field({ description: 'Datetime user was created', nullable: true })
   @CreateDateColumn()
   createdAt: Date;
 
+  @Field({ description: 'Datetime user was last updated', nullable: true })
   @UpdateDateColumn()
   updatedAt: Date;
 
