@@ -11,7 +11,7 @@ import { JwtService } from '@nestjs/jwt';
 import { DataSource, Repository } from 'typeorm';
 
 import { User } from '../users/entities/user.entity';
-import { Profile } from '../users/entities/profile.entity';
+import { Profile } from '../profile/entities/profile.entity';
 import { UserVerification } from '../verification/entities/user-verification.entity';
 
 import { SignUpViaEmailInput } from './dto/sign-up-via-email.input';

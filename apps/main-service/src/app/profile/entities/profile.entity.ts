@@ -12,7 +12,7 @@ import {
 } from 'typeorm';
 import { Exclude } from 'class-transformer';
 
-import { User } from './user.entity';
+import { User } from '../../users/entities/user.entity';
 import { Name } from '../../@common/entities/name.entity';
 import { Address } from '../../@common/entities/address.entity';
 

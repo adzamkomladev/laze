@@ -12,9 +12,16 @@ import { SmsConsumer } from './sms.consumer';
 
 import { AppController } from './app.controller';
 import { VerificationModule } from './verification/verification.module';
+import { ProfileModule } from './profile/profile.module';
 
 @Module({
-  imports: [GlobalModule, AuthModule, UsersModule, VerificationModule],
+  imports: [
+    GlobalModule,
+    AuthModule,
+    UsersModule,
+    VerificationModule,
+    ProfileModule,
+  ],
   controllers: [AppController],
   providers: [AppService, SmsConsumer, EmailReroutedListener],
 })

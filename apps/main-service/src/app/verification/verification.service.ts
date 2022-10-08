@@ -4,21 +4,22 @@ import {
   Inject,
   Injectable,
   Logger,
+  NotFoundException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 
 import { Cache } from 'cache-manager';
 import { Repository } from 'typeorm';
 
-import { User } from '../../users/entities/user.entity';
-import { UserVerification } from '../entities/user-verification.entity';
+import { User } from '../users/entities/user.entity';
+import { UserVerification } from './entities/user-verification.entity';
 
-import { VerifyEmailViaOtpInput } from '../dto/verify-email-via-otp.input';
-import { VerifyPhoneViaOtpInput } from '../dto/verify-phone-via-otp.input';
+import { VerifyEmailViaOtpInput } from './dto/verify-email-via-otp.input';
+import { VerifyPhoneViaOtpInput } from './dto/verify-phone-via-otp.input';
 import { PhoneVerificationService } from '@laze/nestjs-phone-verification';
-import { SendOtpInput } from '../dto/send-otp.input';
-import { OtpType } from '../enums/otp-type.enum';
-import { environment } from '../../../environments/environment';
+import { SendOtpInput } from './dto/send-otp.input';
+import { OtpType } from './enums/otp-type.enum';
+import { environment } from '../../environments/environment';
 
 @Injectable()
 export class VerificationService {
@@ -134,5 +135,17 @@ export class VerificationService {
       },
       relations: ['profile', 'verification'],
     });
+  }
+
+  async findUserVerificationById(id: number) {
+    try {
+      return await this.userVerificationRepository.findOneOrFail({
+        where: {
+          id,
+        },
+      });
+    } catch (e) {
+      throw new NotFoundException('User Verification not found!');
+    }
   }
 }

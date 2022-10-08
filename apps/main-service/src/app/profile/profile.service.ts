@@ -3,7 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 
 import { Repository } from 'typeorm';
 
-import { Profile } from '../../users/entities/profile.entity';
+import { Profile } from './entities/profile.entity';
 
 @Injectable()
 export class ProfileService {

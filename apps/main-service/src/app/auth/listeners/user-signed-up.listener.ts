@@ -13,7 +13,7 @@ import { Email } from '../../@common/interfaces/jobs/email.interface';
 
 import { Events } from '../enums/events.enum';
 
-import { TokenGenerationService } from '../../@common/serices/token-generation.service';
+import { TokenGenerationService } from '../../@common/services/token-generation.service';
 
 import { UserSignedUpEvent } from '../events/user-signed-up.event';
 import { OtpType } from '../../verification/enums/otp-type.enum';

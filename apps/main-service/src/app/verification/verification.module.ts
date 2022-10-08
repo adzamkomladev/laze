@@ -7,11 +7,9 @@ import { UsersModule } from '../users/users.module';
 
 import { UserVerification } from './entities/user-verification.entity';
 
-import { VerificationService } from './services/verification.service';
-// import { ProfileService } from './services/profile.service';
+import { VerificationService } from './verification.service';
 
-import { VerificationResolver } from './resolvers/verification.resolver';
-// import { ProfileResolver } from './resolvers/profile.resolver';
+import { VerificationResolver } from './verification.resolver';
 
 @Module({
   imports: [
@@ -19,12 +17,7 @@ import { VerificationResolver } from './resolvers/verification.resolver';
     TypeOrmModule.forFeature([UserVerification]),
     UsersModule,
   ],
-  providers: [
-    VerificationResolver,
-    VerificationService,
-    // ProfileResolver,
-    // ProfileService,
-  ],
-  exports: [TypeOrmModule],
+  providers: [VerificationResolver, VerificationService],
+  exports: [TypeOrmModule, VerificationService],
 })
 export class VerificationModule {}

@@ -14,7 +14,7 @@ import {
 import { Exclude } from 'class-transformer';
 import * as bcrypt from 'bcrypt';
 
-import { Profile } from './profile.entity';
+import { Profile } from '../../profile/entities/profile.entity';
 import { UserVerification } from '../../verification/entities/user-verification.entity';
 
 @ObjectType()
@@ -26,6 +26,9 @@ export class User {
 
   @Column({ nullable: true })
   profileId: number;
+
+  @Column({ nullable: true })
+  verificationId: number;
 
   @Field({ description: 'User Profile' })
   @OneToOne(() => Profile, (profile) => profile.user)

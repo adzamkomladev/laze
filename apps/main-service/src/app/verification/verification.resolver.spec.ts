@@ -1,6 +1,6 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { VerificationResolver } from './verification.resolver';
-import { VerificationService } from '../services/verification.service';
+import { VerificationService } from './verification.service';
 
 describe('VerificationResolver', () => {
   let resolver: VerificationResolver;

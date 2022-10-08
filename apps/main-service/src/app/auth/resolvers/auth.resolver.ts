@@ -1,9 +1,9 @@
 import { Resolver, Mutation, Args } from '@nestjs/graphql';
 
-import { AuthService } from './auth.service';
+import { SignUpViaEmailInput } from '../dto/sign-up-via-email.input';
+import { SignedUpViaEmailOutput } from '../dto/signed-up-via-email.output';
 
-import { SignUpViaEmailInput } from './dto/sign-up-via-email.input';
-import { SignedUpViaEmailOutput } from './dto/signed-up-via-email.output';
+import { AuthService } from '../auth.service';
 
 @Resolver()
 export class AuthResolver {
@@ -15,4 +15,5 @@ export class AuthResolver {
   ) {
     return this.authService.signUpViaEmail(signUpViaEmailInput);
   }
+
 }

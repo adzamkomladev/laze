@@ -1,17 +1,17 @@
 import { Resolver, Mutation, Args } from '@nestjs/graphql';
 import { UseGuards } from '@nestjs/common';
 
-import { User } from '../../users/entities/user.entity';
+import { User } from '../users/entities/user.entity';
 
-import { VerifyEmailViaOtpInput } from '../dto/verify-email-via-otp.input';
-import { VerifyPhoneViaOtpInput } from '../dto/verify-phone-via-otp.input';
+import { VerifyEmailViaOtpInput } from './dto/verify-email-via-otp.input';
+import { VerifyPhoneViaOtpInput } from './dto/verify-phone-via-otp.input';
 
-import { CurrentUser } from '../../@common/decorators/current-user.decorator';
+import { CurrentUser } from '../@common/decorators/current-user.decorator';
 
-import { GqlAuthGuard } from '../../@common/guards/gql-auth.guard';
+import { GqlAuthGuard } from '../@common/guards/gql-auth.guard';
 
-import { VerificationService } from '../services/verification.service';
-import { SendOtpInput } from '../dto/send-otp.input';
+import { VerificationService } from './verification.service';
+import { SendOtpInput } from './dto/send-otp.input';
 
 @Resolver()
 @UseGuards(GqlAuthGuard)

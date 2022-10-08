@@ -19,7 +19,7 @@ import { Notification } from '../../notification.entity';
 
 import { GqlAuthGuard } from '../guards/gql-auth.guard';
 
-import { TokenGenerationService } from '../serices/token-generation.service';
+import { TokenGenerationService } from '../services/token-generation.service';
 
 import { EmailConsumer } from '../consumers/email.consumer';
 
