@@ -17,6 +17,8 @@ import { environment } from '../../../environments/environment';
 
 import { Notification } from '../../notification.entity';
 
+import { GqlAuthGuard } from '../guards/gql-auth.guard';
+
 import { TokenGenerationService } from '../serices/token-generation.service';
 
 import { EmailConsumer } from '../consumers/email.consumer';
@@ -87,7 +89,7 @@ import { Match } from '../validators/match.validator';
       },
     }),
   ],
-  providers: [EmailConsumer, TokenGenerationService, Match],
+  providers: [EmailConsumer, TokenGenerationService, Match, GqlAuthGuard],
   exports: [
     TypeOrmModule,
     CacheModule,
@@ -99,6 +101,7 @@ import { Match } from '../validators/match.validator';
     EmailConsumer,
     TokenGenerationService,
     Match,
+    GqlAuthGuard,
   ],
 })
 export class GlobalModule {}

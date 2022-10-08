@@ -16,6 +16,7 @@ import { Events } from '../enums/events.enum';
 import { TokenGenerationService } from '../../@common/serices/token-generation.service';
 
 import { UserSignedUpEvent } from '../events/user-signed-up.event';
+import { OtpType } from '../../verification/enums/otp-type.enum';
 
 @Injectable()
 export class UserSignedUpListener {
@@ -31,8 +32,10 @@ export class UserSignedUpListener {
 
   @OnEvent(Events.USER_SIGNED_UP, { async: true })
   async handleUserSignedUpEvent(event: UserSignedUpEvent) {
-    await this.sendWelcomeEmail(event.user);
-    await this.sendEmailOtp(event.user);
+    await Promise.all([
+      this.sendWelcomeEmail(event.user),
+      this.sendEmailOtp(event.user),
+    ]);
 
     this.logger.debug('Called listener with: ', { ...event });
   }
@@ -53,7 +56,9 @@ export class UserSignedUpListener {
   private async sendEmailOtp(user: User) {
     const otp = '' + this.tokenGenerationService.generateOtp(6);
 
-    await this.cache.set(`user.${user.id}.otp`, otp, { ttl: 600 });
+    await this.cache.set(`users.${user.id}.otp.${OtpType.EMAIL}`, otp, {
+      ttl: 600,
+    });
 
     const job: Email = {
       receiver: user.email,

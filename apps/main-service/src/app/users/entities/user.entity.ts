@@ -15,6 +15,7 @@ import { Exclude } from 'class-transformer';
 import * as bcrypt from 'bcrypt';
 
 import { Profile } from './profile.entity';
+import { UserVerification } from '../../verification/entities/user-verification.entity';
 
 @ObjectType()
 @Entity()
@@ -27,6 +28,11 @@ export class User {
   @OneToOne(() => Profile, (profile) => profile.user)
   @JoinColumn()
   profile: Profile;
+
+  @Field({ description: 'User Verification Info' })
+  @OneToOne(() => UserVerification, (verification) => verification.user)
+  @JoinColumn()
+  verification: UserVerification;
 
   @Field({ description: 'Email address of user' })
   @Column({ length: 100, unique: true })

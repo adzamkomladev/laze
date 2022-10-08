@@ -11,9 +11,10 @@ import { EmailReroutedListener } from './email-rerouted.listener';
 import { SmsConsumer } from './sms.consumer';
 
 import { AppController } from './app.controller';
+import { VerificationModule } from './verification/verification.module';
 
 @Module({
-  imports: [GlobalModule, AuthModule, UsersModule],
+  imports: [GlobalModule, AuthModule, UsersModule, VerificationModule],
   controllers: [AppController],
   providers: [AppService, SmsConsumer, EmailReroutedListener],
 })

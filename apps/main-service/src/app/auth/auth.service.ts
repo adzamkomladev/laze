@@ -1,21 +1,27 @@
 import {
   BadRequestException,
   Injectable,
+  NotFoundException,
   UnauthorizedException,
 } from '@nestjs/common';
-import { CreateAuthInput } from './dto/create-auth.input';
-import { UpdateAuthInput } from './dto/update-auth.input';
-import { SignUpViaEmailInput } from './dto/sign-up-via-email.input';
-import { InjectRepository } from '@nestjs/typeorm';
-import { User } from '../users/entities/user.entity';
-import { DataSource, Repository } from 'typeorm';
-import { JwtService } from '@nestjs/jwt';
-import { JwtPayload } from './interfaces/jwt-payload.interface';
 import { EventEmitter2 } from '@nestjs/event-emitter';
-import { UserSignedUpEvent } from './events/user-signed-up.event';
-import { Events } from './enums/events.enum';
+import { InjectRepository } from '@nestjs/typeorm';
+import { JwtService } from '@nestjs/jwt';
+
+import { DataSource, Repository } from 'typeorm';
+
+import { User } from '../users/entities/user.entity';
 import { Profile } from '../users/entities/profile.entity';
+import { UserVerification } from '../verification/entities/user-verification.entity';
+
+import { SignUpViaEmailInput } from './dto/sign-up-via-email.input';
 import { SignedUpViaEmailOutput } from './dto/signed-up-via-email.output';
+
+import { JwtPayload } from './interfaces/jwt-payload.interface';
+
+import { Events } from './enums/events.enum';
+
+import { UserSignedUpEvent } from './events/user-signed-up.event';
 
 @Injectable()
 export class AuthService {
@@ -25,28 +31,10 @@ export class AuthService {
     private readonly dataSource: DataSource,
     @InjectRepository(User) private readonly userRepository: Repository<User>,
     @InjectRepository(Profile)
-    private readonly profileRepository: Repository<Profile>
+    private readonly profileRepository: Repository<Profile>,
+    @InjectRepository(UserVerification)
+    private readonly userVerificationRepository: Repository<UserVerification>
   ) {}
-
-  create(createAuthInput: CreateAuthInput) {
-    return 'This action adds a new auth';
-  }
-
-  findAll() {
-    return `This action returns all auth`;
-  }
-
-  findOne(id: number) {
-    return `This action returns a #${id} auth`;
-  }
-
-  update(id: number, updateAuthInput: UpdateAuthInput) {
-    return `This action updates a #${id} auth`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} auth`;
-  }
 
   async signUpViaEmail(signUpViaEmailInput: SignUpViaEmailInput) {
     const queryRunner = this.dataSource.createQueryRunner();
@@ -60,11 +48,15 @@ export class AuthService {
       let profile = this.profileRepository.create({ name });
       profile = await queryRunner.manager.save(profile);
 
+      let verification = this.userVerificationRepository.create({});
+      verification = await queryRunner.manager.save(verification);
+
       let user = this.userRepository.create({
         email,
         phone,
         password,
         profile,
+        verification,
       });
       user = await queryRunner.manager.save(user);
 
@@ -99,7 +91,19 @@ export class AuthService {
         },
       });
     } catch (error) {
-      throw new UnauthorizedException();
+      throw new NotFoundException('User not found!');
+    }
+  }
+
+  async findUserByPayload(payload: JwtPayload) {
+    try {
+      return await this.userRepository.findOneOrFail({
+        where: {
+          id: payload.id,
+        },
+      });
+    } catch (error) {
+      throw new NotFoundException('User not found!');
     }
   }
 
@@ -107,14 +111,14 @@ export class AuthService {
     try {
       const payload = this.jwtService.decode(jwt) as JwtPayload;
 
-      return await this.findUserById(payload.userId);
+      return await this.findUserById(payload.id);
     } catch (error) {
       throw new UnauthorizedException();
     }
   }
 
   private async generateJwtToken(user: User) {
-    const payload: JwtPayload = { userId: user.id, email: user.email };
+    const payload: JwtPayload = { id: user.id, email: user.email };
 
     return this.jwtService.sign(payload);
   }
