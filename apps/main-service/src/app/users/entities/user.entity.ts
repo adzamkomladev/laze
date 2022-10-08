@@ -24,6 +24,9 @@ export class User {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
+  @Column({ nullable: true })
+  profileId: number;
+
   @Field({ description: 'User Profile' })
   @OneToOne(() => Profile, (profile) => profile.user)
   @JoinColumn()

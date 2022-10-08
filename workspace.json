@@ -8,6 +8,8 @@
     "auth-e2e": "apps/auth-e2e",
     "client": "apps/client",
     "client-e2e": "apps/client-e2e",
-    "main-service": "apps/main-service"
+    "main-service": "apps/main-service",
+    "shared-data-access-arkesel": "libs/shared/data-access/arkesel",
+    "shared-data-access-phone-verification": "libs/shared/data-access/phone-verification"
   }
 }

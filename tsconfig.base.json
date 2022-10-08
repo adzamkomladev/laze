@@ -14,7 +14,12 @@
     "skipLibCheck": true,
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
-    "paths": {}
+    "paths": {
+      "@laze/nestjs-arkesel": ["libs/shared/data-access/arkesel/src/index.ts"],
+      "@laze/nestjs-phone-verification": [
+        "libs/shared/data-access/phone-verification/src/index.ts"
+      ]
+    }
   },
   "exclude": ["node_modules", "tmp"]
 }

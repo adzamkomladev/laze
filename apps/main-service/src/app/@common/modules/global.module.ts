@@ -32,6 +32,7 @@ import { Match } from '../validators/match.validator';
       useFactory: () =>
         ({
           ...environment.database,
+          logging: true,
         } as TypeOrmModuleOptions),
     }),
     CacheModule.register<ClientOpts>({

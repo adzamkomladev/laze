@@ -10,11 +10,15 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Cache } from 'cache-manager';
 import { Repository } from 'typeorm';
 
-import { User } from '../users/entities/user.entity';
-import { UserVerification } from './entities/user-verification.entity';
+import { User } from '../../users/entities/user.entity';
+import { UserVerification } from '../entities/user-verification.entity';
 
-import { VerifyEmailViaOtpInput } from './dto/verify-email-via-otp.input';
-import { VerifyPhoneViaOtpInput } from './dto/verify-phone-via-otp.input';
+import { VerifyEmailViaOtpInput } from '../dto/verify-email-via-otp.input';
+import { VerifyPhoneViaOtpInput } from '../dto/verify-phone-via-otp.input';
+import { PhoneVerificationService } from '@laze/nestjs-phone-verification';
+import { SendOtpInput } from '../dto/send-otp.input';
+import { OtpType } from '../enums/otp-type.enum';
+import { environment } from '../../../environments/environment';
 
 @Injectable()
 export class VerificationService {
@@ -22,6 +26,7 @@ export class VerificationService {
 
   constructor(
     @Inject(CACHE_MANAGER) private readonly cache: Cache,
+    private readonly phoneVerificationService: PhoneVerificationService,
     @InjectRepository(UserVerification)
     private readonly userVerificationRepository: Repository<UserVerification>,
     @InjectRepository(User)
@@ -72,12 +77,15 @@ export class VerificationService {
     verifyPhoneViaOtpInput: VerifyPhoneViaOtpInput,
     user: User
   ) {
-    const { code, type } = verifyPhoneViaOtpInput;
-    const key = `users.${user.id}.otp.${type}`;
+    const { code } = verifyPhoneViaOtpInput;
 
-    const otp = await this.cache.get<string>(key);
+    const res = await this.phoneVerificationService.verifyCode({
+      code,
+      number: user.phone,
+    });
 
-    if (otp !== code) {
+    if (!res.success) {
+      this.logger.error(res);
       throw new BadRequestException('OTP Code is not valid!');
     }
 
@@ -96,13 +104,35 @@ export class VerificationService {
 
       fullUser.verification = verification;
 
-      await this.cache.del(key);
-
       return fullUser;
     } catch (e) {
       this.logger.error(e.message, e);
 
       throw new BadRequestException('Failed to verify phone via otp!');
     }
+  }
+
+  async sendOtpForPhoneVerification(sendOtpInput: SendOtpInput, user: User) {
+    const { type } = sendOtpInput;
+
+    const res = await this.phoneVerificationService.sendCode({
+      number: user.phone,
+      medium: type === OtpType.SMS ? 'sms' : 'voice',
+      message: `Your ${environment.app.name} phone number verification code is %otp_code%. Do not share this code with anyone. Visit your ${environment.app.name} account now to verify.`,
+    });
+
+    if (!res.success) {
+      this.logger.error(res);
+      throw new BadRequestException(
+        'Failed to send OTP code. Please try again later!'
+      );
+    }
+
+    return await this.userRepository.findOneOrFail({
+      where: {
+        id: user.id,
+      },
+      relations: ['profile', 'verification'],
+    });
   }
 }
