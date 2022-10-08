@@ -14,6 +14,7 @@ import { User } from '../users/entities/user.entity';
 import { UserVerification } from './entities/user-verification.entity';
 
 import { VerifyEmailViaOtpInput } from './dto/verify-email-via-otp.input';
+import { VerifyPhoneViaOtpInput } from './dto/verify-phone-via-otp.input';
 
 @Injectable()
 export class VerificationService {
@@ -64,6 +65,44 @@ export class VerificationService {
       this.logger.error(e.message, e);
 
       throw new BadRequestException('Failed to verify email via otp!');
+    }
+  }
+
+  async verifyPhoneViaOtp(
+    verifyPhoneViaOtpInput: VerifyPhoneViaOtpInput,
+    user: User
+  ) {
+    const { code, type } = verifyPhoneViaOtpInput;
+    const key = `users.${user.id}.otp.${type}`;
+
+    const otp = await this.cache.get<string>(key);
+
+    if (otp !== code) {
+      throw new BadRequestException('OTP Code is not valid!');
+    }
+
+    try {
+      const fullUser = await this.userRepository.findOneOrFail({
+        where: {
+          id: user.id,
+        },
+        relations: ['profile', 'verification'],
+      });
+
+      let verification = fullUser.verification;
+      verification.phone = true;
+      verification.phoneVerifiedAt = new Date();
+      verification = await this.userVerificationRepository.save(verification);
+
+      fullUser.verification = verification;
+
+      await this.cache.del(key);
+
+      return fullUser;
+    } catch (e) {
+      this.logger.error(e.message, e);
+
+      throw new BadRequestException('Failed to verify phone via otp!');
     }
   }
 }
