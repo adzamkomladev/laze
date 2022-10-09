@@ -53,4 +53,16 @@ export class VerificationResolver {
       user
     );
   }
+
+  @Mutation(() => User, { name: 'sendOtpForEmailVerification' })
+  sendOtpForEmailVerification(
+    @CurrentUser() user: User,
+    @Args('sendOtpInput')
+      sendOtpInput: SendOtpInput
+  ) {
+    return this.verificationService.sendOtpForEmailVerification(
+      sendOtpInput,
+      user
+    );
+  }
 }
