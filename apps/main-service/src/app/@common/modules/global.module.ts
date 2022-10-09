@@ -9,7 +9,10 @@ import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 import { join } from 'path';
 import type { ClientOpts } from 'redis';
 import * as redisStore from 'cache-manager-redis-store';
-import { ApolloServerPluginLandingPageLocalDefault } from 'apollo-server-core';
+import {
+  ApolloServerPluginSchemaReporting,
+  ApolloServerPluginLandingPageLocalDefault,
+} from 'apollo-server-core';
 import { MailerModule } from '@nestjs-modules/mailer';
 import { HandlebarsAdapter } from '@nestjs-modules/mailer/dist/adapters/handlebars.adapter';
 
@@ -64,7 +67,10 @@ import { Match } from '../validators/match.validator';
       driver: ApolloDriver,
       autoSchemaFile: true,
       playground: false,
-      plugins: [ApolloServerPluginLandingPageLocalDefault()],
+      plugins: [
+        ApolloServerPluginSchemaReporting(),
+        ApolloServerPluginLandingPageLocalDefault(),
+      ],
     }),
     MailerModule.forRoot({
       // transport: 'smtps://user@example.com:topsecret@smtp.example.com',

@@ -5,13 +5,13 @@ import { User } from '../users/entities/user.entity';
 
 import { VerifyEmailViaOtpInput } from './dto/verify-email-via-otp.input';
 import { VerifyPhoneViaOtpInput } from './dto/verify-phone-via-otp.input';
+import { SendOtpInput } from './dto/send-otp.input';
 
 import { CurrentUser } from '../@common/decorators/current-user.decorator';
 
 import { GqlAuthGuard } from '../@common/guards/gql-auth.guard';
 
 import { VerificationService } from './verification.service';
-import { SendOtpInput } from './dto/send-otp.input';
 
 @Resolver()
 @UseGuards(GqlAuthGuard)

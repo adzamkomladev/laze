@@ -87,19 +87,19 @@ export class VerificationService {
     verifyPhoneViaOtpInput: VerifyPhoneViaOtpInput,
     user: User
   ) {
-    const { code } = verifyPhoneViaOtpInput;
-
-    const res = await this.phoneVerificationService.verifyCode({
-      code,
-      number: user.phone,
-    });
-
-    if (!res.success) {
-      this.logger.error(res);
-      throw new BadRequestException('OTP Code is not valid!');
-    }
-
     try {
+      const { code } = verifyPhoneViaOtpInput;
+
+      const res = await this.phoneVerificationService.verifyCode({
+        code,
+        number: user.phone,
+      });
+
+      if (!res.success) {
+        this.logger.error(res);
+        throw new BadRequestException('OTP Code is not valid!');
+      }
+
       const fullUser = await this.userRepository.findOneOrFail({
         where: {
           id: user.id,
@@ -118,32 +118,44 @@ export class VerificationService {
     } catch (e) {
       this.logger.error(e.message, e);
 
-      throw new BadRequestException('Failed to verify phone via otp!');
+      throw e instanceof BadRequestException
+        ? e
+        : new BadRequestException('Failed to verify phone via otp!');
     }
   }
 
   async sendOtpForPhoneVerification(sendOtpInput: SendOtpInput, user: User) {
-    const { type } = sendOtpInput;
+    try {
+      const { type } = sendOtpInput;
 
-    const res = await this.phoneVerificationService.sendCode({
-      number: user.phone,
-      medium: type === OtpType.SMS ? 'sms' : 'voice',
-      message: `Your ${environment.app.name} phone number verification code is %otp_code%. Do not share this code with anyone. Visit your ${environment.app.name} account now to verify.`,
-    });
+      const res = await this.phoneVerificationService.sendCode({
+        number: user.phone,
+        medium: type === OtpType.SMS ? 'sms' : 'voice',
+        message: `Your ${environment.app.name} phone number verification code is %otp_code%. Do not share this code with anyone. Visit your ${environment.app.name} account now to verify.`,
+      });
 
-    if (!res.success) {
-      this.logger.error(res);
-      throw new BadRequestException(
-        'Failed to send OTP code. Please try again later!'
-      );
+      if (!res.success) {
+        this.logger.error(res);
+        throw new BadRequestException(
+          'Failed to send OTP code. Please try again later!'
+        );
+      }
+
+      return await this.userRepository.findOneOrFail({
+        where: {
+          id: user.id,
+        },
+        relations: ['profile', 'verification'],
+      });
+    } catch (e) {
+      this.logger.error(e.message, e);
+
+      throw e instanceof BadRequestException
+        ? e
+        : new BadRequestException(
+            'Failed to send OTP code. Please try again later!'
+          );
     }
-
-    return await this.userRepository.findOneOrFail({
-      where: {
-        id: user.id,
-      },
-      relations: ['profile', 'verification'],
-    });
   }
 
   async sendOtpForEmailVerification(sendOtpInput: SendOtpInput, user: User) {
@@ -176,7 +188,8 @@ export class VerificationService {
 
       return fullUser;
     } catch (e) {
-      this.logger.error(e);
+      this.logger.error(e.message, e);
+
       throw new BadRequestException(
         'Failed to send OTP code. Please try again later!'
       );
@@ -191,6 +204,8 @@ export class VerificationService {
         },
       });
     } catch (e) {
+      this.logger.error(e.message, e);
+
       throw new NotFoundException('User Verification not found!');
     }
   }
