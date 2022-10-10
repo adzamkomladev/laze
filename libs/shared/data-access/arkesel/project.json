@@ -6,14 +6,20 @@
   "targets": {
     "lint": {
       "executor": "@nrwl/linter:eslint",
-      "outputs": ["{options.outputFile}"],
+      "outputs": [
+        "{options.outputFile}"
+      ],
       "options": {
-        "lintFilePatterns": ["libs/shared/data-access/arkesel/**/*.ts"]
+        "lintFilePatterns": [
+          "libs/shared/data-access/arkesel/**/*.ts"
+        ]
       }
     },
     "test": {
       "executor": "@nrwl/jest:jest",
-      "outputs": ["coverage/libs/shared/data-access/arkesel"],
+      "outputs": [
+        "coverage/libs/shared/data-access/arkesel"
+      ],
       "options": {
         "jestConfig": "libs/shared/data-access/arkesel/jest.config.ts",
         "passWithNoTests": true

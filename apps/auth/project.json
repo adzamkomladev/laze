@@ -1,4 +1,5 @@
 {
+  "name": "auth",
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
   "projectType": "application",
   "sourceRoot": "apps/auth/src",
@@ -6,7 +7,9 @@
   "targets": {
     "build": {
       "executor": "@angular-devkit/build-angular:browser",
-      "outputs": ["{options.outputPath}"],
+      "outputs": [
+        "{options.outputPath}"
+      ],
       "options": {
         "outputPath": "dist/apps/auth",
         "index": "apps/auth/src/index.html",
@@ -14,8 +17,21 @@
         "polyfills": "apps/auth/src/polyfills.ts",
         "tsConfig": "apps/auth/tsconfig.app.json",
         "inlineStyleLanguage": "scss",
-        "assets": ["apps/auth/src/favicon.ico", "apps/auth/src/assets"],
-        "styles": ["apps/auth/src/styles.scss"],
+        "assets": [
+          "apps/auth/src/favicon.ico",
+          "apps/auth/src/assets",
+          {
+            "glob": "**/*",
+            "input": "node_modules/@taiga-ui/icons/src",
+            "output": "assets/taiga-ui/icons"
+          }
+        ],
+        "styles": [
+          "node_modules/@taiga-ui/core/styles/taiga-ui-theme.less",
+          "node_modules/@taiga-ui/core/styles/taiga-ui-fonts.less",
+          "node_modules/@taiga-ui/styles/taiga-ui-global.less",
+          "apps/auth/src/styles.scss"
+        ],
         "scripts": []
       },
       "configurations": {
@@ -72,12 +88,17 @@
     "lint": {
       "executor": "@nrwl/linter:eslint",
       "options": {
-        "lintFilePatterns": ["apps/auth/**/*.ts", "apps/auth/**/*.html"]
+        "lintFilePatterns": [
+          "apps/auth/**/*.ts",
+          "apps/auth/**/*.html"
+        ]
       }
     },
     "test": {
       "executor": "@nrwl/jest:jest",
-      "outputs": ["coverage/apps/auth"],
+      "outputs": [
+        "coverage/apps/auth"
+      ],
       "options": {
         "jestConfig": "apps/auth/jest.config.ts",
         "passWithNoTests": true

@@ -6,7 +6,9 @@
   "targets": {
     "lint": {
       "executor": "@nrwl/linter:eslint",
-      "outputs": ["{options.outputFile}"],
+      "outputs": [
+        "{options.outputFile}"
+      ],
       "options": {
         "lintFilePatterns": [
           "libs/shared/data-access/phone-verification/**/*.ts"
@@ -15,7 +17,9 @@
     },
     "test": {
       "executor": "@nrwl/jest:jest",
-      "outputs": ["coverage/libs/shared/data-access/phone-verification"],
+      "outputs": [
+        "coverage/libs/shared/data-access/phone-verification"
+      ],
       "options": {
         "jestConfig": "libs/shared/data-access/phone-verification/jest.config.ts",
         "passWithNoTests": true
