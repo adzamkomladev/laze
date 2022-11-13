@@ -2,11 +2,11 @@ name: Production CI
 
 on:
   push:
-    branches: [ "main" ]
+    branches: ['main']
   workflow_dispatch:
 
 env:
-  NODE_VERSION: '18.x'                # set this to the node version to use
+  NODE_VERSION: '18.x' # set this to the node version to use
 
 permissions:
   contents: read
@@ -26,7 +26,7 @@ jobs:
       - name: npm install, build, and test
         run: |
           npm install
-          nx run main-service:build:production
+          npx nx run main-service:build:production
 
   deploy:
     # The type of runner that the job will run on
