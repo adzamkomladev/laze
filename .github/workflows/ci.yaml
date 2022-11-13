@@ -47,7 +47,7 @@ jobs:
             eval `ssh-agent`
             ssh-add ~/.ssh/github_id_rsa
             git pull origin main
-            npx nx run main-service:build:production
+            /home/dev/.nvm/versions/node/v18.12.1/bin/npx nx run main-service:build:production
             sudo supervisorctl start laze.main-service
             sudo supervisorctl status laze.main-service
             sudo tail -n 30 /var/log/laze.main-service.out.log
