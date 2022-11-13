@@ -1,0 +1,37 @@
+<div class="container">
+  <div class="tui-row">
+    <div class="tui-col_md-6 debug4">
+      <div size="l" tuiIsland class="card debug3">
+        <div class="tui-island__content debug2">
+          <div class="debug1">
+            <h3 class="tui-island__title">Sign In</h3>
+            <form [formGroup]="form" (ngSubmit)="onSubmit()">
+              <div class="tui-form__row">
+                <tui-input formControlName="email" [tuiTextfieldCleaner]="true">
+                  Enter your email
+                  <span class="tui-required"></span>
+
+                  <input tuiTextfield type="email" />
+                </tui-input>
+              </div>
+              <div class="tui-form__row">
+                <tui-input-password
+                  formControlName="password"
+                  class="tui-space_top-2"
+                >
+                  Enter your password
+                  <input tuiTextfield placeholder="Make it secure!" />
+                </tui-input-password>
+              </div>
+              <div class="tui-form__row">
+                <button tuiIconButton type="submit" [disabled]="form.invalid">
+                  Sign In
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

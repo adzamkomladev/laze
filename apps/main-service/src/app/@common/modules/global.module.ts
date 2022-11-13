@@ -1,4 +1,4 @@
-import { Module, Global, CacheModule } from '@nestjs/common';
+import { CacheModule, Global, Module } from '@nestjs/common';
 import { TypeOrmModule, TypeOrmModuleOptions } from '@nestjs/typeorm';
 import { BullModule } from '@nestjs/bull';
 import { ScheduleModule } from '@nestjs/schedule';
@@ -10,8 +10,8 @@ import { join } from 'path';
 import type { ClientOpts } from 'redis';
 import * as redisStore from 'cache-manager-redis-store';
 import {
-  ApolloServerPluginSchemaReporting,
   ApolloServerPluginLandingPageLocalDefault,
+  ApolloServerPluginSchemaReporting,
 } from 'apollo-server-core';
 import { MailerModule } from '@nestjs-modules/mailer';
 import { HandlebarsAdapter } from '@nestjs-modules/mailer/dist/adapters/handlebars.adapter';
@@ -65,8 +65,9 @@ import { Match } from '../validators/match.validator';
     TypeOrmModule.forFeature([Notification]),
     GraphQLModule.forRoot<ApolloDriverConfig>({
       driver: ApolloDriver,
-      autoSchemaFile: true,
+      cache: 'bounded',
       playground: false,
+      autoSchemaFile: true,
       plugins: [
         ApolloServerPluginSchemaReporting(),
         ApolloServerPluginLandingPageLocalDefault(),

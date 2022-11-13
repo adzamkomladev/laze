@@ -1,0 +1,214 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+type Name {
+  """First name"""
+  first: String!
+
+  """Last name"""
+  last: String!
+
+  """Other names"""
+  other: String
+}
+
+type Address {
+  """Street of address"""
+  street: String
+
+  """City of address"""
+  city: String
+
+  """State of address"""
+  state: String
+
+  """Country of address"""
+  country: String
+
+  """Code of address"""
+  code: String
+}
+
+type Profile {
+  """This is the ID of the user profile"""
+  id: ID!
+
+  """Owner of profile"""
+  user: User
+
+  """Name profile of user"""
+  name: Name
+
+  """Sex profile of user"""
+  sex: Sex
+
+  """Display avatar url of the profile"""
+  avatar: String
+
+  """Address profile of user"""
+  address: Address
+
+  """Date profile was last updated"""
+  updatedAt: DateTime
+}
+
+"""Sex of user"""
+enum Sex {
+  MALE
+  FEMALE
+}
+
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
+
+type UserVerification {
+  """This is the ID of the user verification info"""
+  id: ID!
+
+  """Owner of verification info"""
+  user: User
+
+  """Is Email address of user verified"""
+  email: Boolean!
+
+  """Datetime user email address was verified"""
+  emailVerifiedAt: DateTime
+
+  """Is Phone number of user verified"""
+  phone: Boolean!
+
+  """Datetime user phone number was verified"""
+  phoneVerifiedAt: DateTime
+
+  """Datetime verification was created"""
+  createdAt: DateTime
+
+  """Datetime verification was last updated"""
+  updatedAt: DateTime
+}
+
+type User {
+  """This is the ID of the user"""
+  id: ID!
+
+  """User Profile"""
+  profile: Profile!
+
+  """User Verification Info"""
+  verification: UserVerification!
+
+  """Email address of user"""
+  email: String!
+
+  """Phone number of user"""
+  phone: String
+
+  """Datetime user was created"""
+  createdAt: DateTime
+
+  """Datetime user was last updated"""
+  updatedAt: DateTime
+}
+
+type AuthOutput {
+  """JWT access token"""
+  accessToken: String!
+}
+
+type SignedUpViaEmailOutput {
+  """User registered"""
+  user: User!
+
+  """Auth options"""
+  auth: AuthOutput!
+}
+
+type SignedInViaEmailOutput {
+  """User signed in"""
+  user: User!
+
+  """Auth options"""
+  auth: AuthOutput!
+}
+
+type Query {
+  currentUser: User!
+  users: [User!]!
+  user(id: Int!): User!
+}
+
+type Mutation {
+  signUpViaEmail(signUpViaEmailInput: SignUpViaEmailInput!): SignedUpViaEmailOutput!
+  signInViaEmail(signInViaEmailInput: SignInViaEmailInput!): SignedInViaEmailOutput!
+  verifyEmailViaOtp(verifyEmailViaOtpInput: VerifyEmailViaOtpInput!): User!
+  verifyPhoneViaOtp(verifyPhoneViaOtpInput: VerifyPhoneViaOtpInput!): User!
+  sendOtpForPhoneVerification(sendOtpInput: SendOtpInput!): User!
+  sendOtpForEmailVerification(sendOtpInput: SendOtpInput!): User!
+}
+
+input SignUpViaEmailInput {
+  """Email address to create account with"""
+  email: String!
+
+  """Phone number of user"""
+  phone: String!
+
+  """Name of user"""
+  name: NameInput!
+
+  """Password to create account with"""
+  password: String!
+
+  """Confirm password to create account with"""
+  confirmPassword: String!
+}
+
+input NameInput {
+  """First name of user signing up"""
+  first: String!
+
+  """Last name of user signing up"""
+  last: String!
+
+  """Other names of user signing up"""
+  other: String
+}
+
+input SignInViaEmailInput {
+  """Email address to sign into account with"""
+  email: String!
+
+  """Password to sign into account with"""
+  password: String!
+}
+
+input VerifyEmailViaOtpInput {
+  """OTP code sent"""
+  code: String!
+
+  """Type of medium the otp code was sent via"""
+  type: OtpType!
+}
+
+"""Type of medium otp code will be sent via"""
+enum OtpType {
+  EMAIL
+  SMS
+  WHATSAPP
+}
+
+input VerifyPhoneViaOtpInput {
+  """OTP code sent"""
+  code: String!
+
+  """Type of medium the otp code was sent via"""
+  type: OtpType!
+}
+
+input SendOtpInput {
+  """Type of medium the otp code is going to be sent via"""
+  type: OtpType!
+}

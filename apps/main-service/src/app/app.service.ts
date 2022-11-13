@@ -1,6 +1,6 @@
 import { CACHE_MANAGER, Inject, Injectable, Logger } from '@nestjs/common';
 import { InjectQueue } from '@nestjs/bull';
-import { Interval } from '@nestjs/schedule';
+// import { Interval } from '@nestjs/schedule';
 
 import { Cache } from 'cache-manager';
 
@@ -36,7 +36,7 @@ export class AppService {
 
   // @Interval('sendSms', 2000)
   async sendSms() {
-    let message = (await this.cache.get('message')) ?? 'Good morning';
+    const message = (await this.cache.get('message')) ?? 'Good morning';
 
     const responses = [1, 20, 45, 83, 96, 10, 2, 67];
     const repeat = responses[Math.floor(Math.random() * responses.length)];

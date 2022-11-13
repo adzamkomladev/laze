@@ -1,4 +1,4 @@
-import { ObjectType, Field } from '@nestjs/graphql';
+import { Field, ID, ObjectType } from '@nestjs/graphql';
 
 import {
   BeforeInsert,
@@ -21,6 +21,9 @@ import { Sex } from '../../@common/enums/sex.enum';
 @Entity()
 @ObjectType()
 export class Profile {
+  @Field(() => ID, {
+    description: 'This is the ID of the user profile',
+  })
   @PrimaryGeneratedColumn()
   id: number;
 

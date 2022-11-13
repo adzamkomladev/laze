@@ -22,7 +22,18 @@ import { NxWelcomeComponent } from './nx-welcome.component';
     TuiRootModule,
     TuiDialogModule,
     TuiAlertModule,
-    RouterModule.forRoot([], { initialNavigation: 'enabledBlocking' }),
+    RouterModule.forRoot(
+      [
+        {
+          path: 'sign-in',
+          loadComponent: () =>
+            import('./sign-in/sign-in.component').then(
+              (mod) => mod.SignInComponent
+            ),
+        },
+      ],
+      { initialNavigation: 'enabledBlocking' }
+    ),
   ],
   providers: [{ provide: TUI_SANITIZER, useClass: NgDompurifySanitizer }],
   bootstrap: [AppComponent],
