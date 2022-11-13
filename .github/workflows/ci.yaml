@@ -40,7 +40,7 @@ jobs:
           username: ${{ secrets.USERNAME }}
           password: ${{ secrets.PASSWORD }}
           port: ${{ secrets.PORT }}
-          #          key: ${{ secrets.SSHKEY }}
+          #         key: ${{ secrets.SSHKEY }}
           script: |
             sudo supervisorctl stop laze.main-service
             cd /home/dev/webapps/laze
